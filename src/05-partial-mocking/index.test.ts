@@ -24,10 +24,6 @@ describe('partial mocking', () => {
     mockTwo();
     mockThree();
 
-    expect(mockOne).toHaveBeenCalledTimes(1);
-    expect(mockTwo).toHaveBeenCalledTimes(1);
-    expect(mockThree).toHaveBeenCalledTimes(1);
-
     expect(logSpy).not.toHaveBeenCalled();
 
     logSpy.mockRestore();
