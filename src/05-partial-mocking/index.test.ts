@@ -1,8 +1,15 @@
-// Uncomment the code below and write your tests
-// import { mockOne, mockTwo, mockThree, unmockedFunction } from './index';
+import { mockOne, mockTwo, mockThree, unmockedFunction } from './index';
 
 jest.mock('./index', () => {
-  // const originalModule = jest.requireActual<typeof import('./index')>('./index');
+  const originalModule =
+    jest.requireActual<typeof import('./index')>('./index');
+
+  return {
+    ...originalModule,
+    mockOne: jest.fn(),
+    mockTwo: jest.fn(),
+    mockThree: jest.fn(),
+  };
 });
 
 describe('partial mocking', () => {
@@ -11,10 +18,27 @@ describe('partial mocking', () => {
   });
 
   test('mockOne, mockTwo, mockThree should not log into console', () => {
-    // Write your test here
+    const logSpy = jest.spyOn(console, 'log');
+
+    mockOne();
+    mockTwo();
+    mockThree();
+
+    expect(mockOne).toHaveBeenCalledTimes(1);
+    expect(mockTwo).toHaveBeenCalledTimes(1);
+    expect(mockThree).toHaveBeenCalledTimes(1);
+
+    expect(logSpy).not.toHaveBeenCalled();
+
+    logSpy.mockRestore();
   });
 
   test('unmockedFunction should log into console', () => {
-    // Write your test here
+    const logSpy = jest.spyOn(console, 'log');
+
+    unmockedFunction();
+    expect(logSpy).toHaveBeenCalledWith('I am not mocked');
+
+    logSpy.mockRestore();
   });
 });
